@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Thoughts - Student Diary</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url("https://wallpapers.com/images/hd/psychology-inner-thoughts-illustration-art-da1monrpz4h7lny6.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #2c3e50;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      background: rgba(0,0,0,0.5);
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 30px auto;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    label {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      padding: 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      resize: none;
+      margin-top: 12px;
+      box-sizing: border-box;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 16px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    #saveThoughtsBtn {
+      background-color: #3498db;
+      color: white;
+    }
+
+    #clearTodayBtn {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+    }
+
+    .history {
+      margin-top: 30px;
+    }
+
+    .history h3 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .thought-entry {
+      background: #f1f1f1;
+      padding: 10px 15px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .thought-entry small {
+      display: block;
+      color: #777;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>💭 Daily Thoughts</h1>
+  </header>
+
+  <main>
+    <div class="container">
+      <label for="thoughts">Write your thoughts for today:</label>
+      <textarea id="thoughts" placeholder="Write here..."></textarea>
+      <br>
+      <button id="saveThoughtsBtn">💾 Save</button>
+      <button id="clearTodayBtn">🧹 Clear</button>
+      <br>
+      <a href="index.html" class="back">⬅ Back to Home</a>
+
+      <div class="history" id="historySection">
+        <h3>🕓 Past Thoughts</h3>
+        <div id="thoughtHistory"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const thoughtsTextarea = document.getElementById('thoughts');
+    const saveThoughtsBtn = document.getElementById('saveThoughtsBtn');
+    const clearTodayBtn = document.getElementById('clearTodayBtn');
+    const thoughtHistory = document.getElementById('thoughtHistory');
+
+    const today = new Date().toISOString().split('T')[0]; // yyyy-mm-dd
+
+    // Load today's thought if available
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedData = JSON.parse(localStorage.getItem('dailyThoughts')) || {};
+      if (savedData[today]) {
+        thoughtsTextarea.value = savedData[today];
+      }
+      showHistory(savedData);
+    });
+
+    // Save Thought
+    saveThoughtsBtn.addEventListener('click', () => {
+      const thoughts = thoughtsTextarea.value.trim();
+      if (thoughts === '') {
+        alert("Please write something before saving.");
+        return;
+      }
+
+      const savedData = JSON.parse(localStorage.getItem('dailyThoughts')) || {};
+      savedData[today] = thoughts;
+      localStorage.setItem('dailyThoughts', JSON.stringify(savedData));
+      alert("✅ Thought saved!");
+      showHistory(savedData);
+    });
+
+    // Clear today's thought
+    clearTodayBtn.addEventListener('click', () => {
+      if (confirm("Are you sure you want to clear today's entry?")) {
+        thoughtsTextarea.value = '';
+        const savedData = JSON.parse(localStorage.getItem('dailyThoughts')) || {};
+        delete savedData[today];
+        localStorage.setItem('dailyThoughts', JSON.stringify(savedData));
+        showHistory(savedData);
+      }
+    });
+
+    // Display past thoughts
+    function showHistory(data) {
+      thoughtHistory.innerHTML = '';
+      const sortedDates = Object.keys(data).sort((a, b) => new Date(b) - new Date(a));
+      if (sortedDates.length === 0) {
+        thoughtHistory.innerHTML = "<p style='text-align:center; color:gray;'>No previous entries yet.</p>";
+        return;
+      }
+
+      sortedDates.forEach(date => {
+        const div = document.createElement('div');
+        div.className = 'thought-entry';
+        div.innerHTML = `
+          <div>${data[date]}</div>
+          <small>${date}</small>
+        `;
+        thoughtHistory.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+</html>
