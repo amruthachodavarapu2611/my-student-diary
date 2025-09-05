@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Diary - Contact</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url("https://wallpapercave.com/wp/wp7347703.jpg") no-repeat center center fixed;
+      background-size: cover;
+      scroll-behavior: smooth;
+      color: #2c3e50;
+    }
+
+    nav {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      background: rgba(239, 239, 239, 0.8);
+      backdrop-filter: blur(6px);
+      padding: 15px 30px;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      z-index: 100;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #2c3e50;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: #3498db;
+    }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 120px 20px 60px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 40px;
+      width: 100%;
+      max-width: 500px;
+      border-radius: 14px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      text-align: center;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      color: #2c3e50;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    form button:hover {
+      background-color: #2980b9;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.2s ease-in-out;
+    }
+
+    .back-home:hover {
+      color: #2980b9;
+    }
+
+    .loader {
+      display: inline-block;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      nav {
+        justify-content: center;
+      }
+
+      .container {
+        margin: 0 10px;
+        padding: 30px 20px;
+      }
+
+      nav a {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <a href="home.html">Home</a>
+    <a href="index.html">Categories</a>
+    <a href="signin.html">Sign Up</a>
+    <a href="login.html">Login</a>
+  </nav>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <form id="contactForm" onsubmit="submitContactForm(event)">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit" id="sendBtn">Send Message</button>
+      </form>
+
+      <!-- Back to Home Link -->
+      <a href="index.html" class="back-home">⬅ Back to Home</a>
+    </div>
+  </section>
+
+  <script>
+    function submitContactForm(event) {
+      event.preventDefault();
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const sendBtn = document.getElementById("sendBtn");
+
+      if (!name || !email || !message) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      if (!email.includes("@") || !email.includes(".")) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      // Show loader on button
+      sendBtn.innerHTML = 'Sending... <span class="loader"></span>';
+      sendBtn.disabled = true;
+
+      // Simulate sending message
+      setTimeout(() => {
+        alert(`Thank you, ${name}! Your message has been received.`);
+
+        // Clear form
+        document.getElementById("contactForm").reset();
+
+        // Reset button
+        sendBtn.innerHTML = "Send Message";
+        sendBtn.disabled = false;
+
+        // Optional redirect after 1 second
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }, 1500);
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance - Student Diary</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url("https://img.freepik.com/free-photo/top-view-boss-s-day-composition-blue-background-with-copy-space_23-2148664107.jpg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #2c3e50;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 30px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    h1, h3 {
+      text-align: center;
+    }
+
+    input[type="date"],
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    input[type="date"] {
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #4fe12e;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #15d237;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 20px;
+      text-decoration: none;
+      color: #4a90e2;
+      font-weight: bold;
+      text-align: center;
+      display: block;
+    }
+
+    ul#attendanceList {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    ul#attendanceList li {
+      background: #f1f1f1;
+      padding: 10px;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .remove-btn {
+      background: red;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .progress {
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: #4caf50;
+      width: 0%;
+      transition: width 0.5s;
+      text-align: center;
+      color: white;
+      font-size: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📅 <b>Attendance</b></h1>
+  </header>
+
+  <main>
+    <div class="container">
+      <label for="attendance"><b>Mark your attendance for today:</b></label>
+      <input type="date" id="attendance">
+      <button id="saveAttendanceBtn">Save</button>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+
+      <h3>📌 Marked Dates</h3>
+      <ul id="attendanceList"></ul>
+
+      <p style="text-align:center;">
+        Total days marked: <strong><span id="attendanceCount">0</span></strong>
+      </p>
+
+      <a href="index.html" class="back">⬅ Back to Home</a>
+    </div>
+  </main>
+
+  <script>
+    const attendanceInput = document.getElementById('attendance');
+    const saveButton = document.getElementById('saveAttendanceBtn');
+    const attendanceList = document.getElementById('attendanceList');
+    const attendanceCount = document.getElementById('attendanceCount');
+    const progressBar = document.getElementById('progressBar');
+
+    const GOAL_DAYS = 30; // Example goal
+
+    // Set today's date by default
+    window.addEventListener('DOMContentLoaded', () => {
+      attendanceInput.valueAsDate = new Date();
+      const savedDates = JSON.parse(localStorage.getItem('attendanceDates')) || [];
+      updateAttendanceDisplay(savedDates);
+    });
+
+    saveButton.addEventListener('click', () => {
+      const date = attendanceInput.value;
+      if (!date) {
+        alert("Please select a date.");
+        return;
+      }
+
+      let savedDates = JSON.parse(localStorage.getItem('attendanceDates')) || [];
+
+      if (!savedDates.includes(date)) {
+        savedDates.push(date);
+        localStorage.setItem('attendanceDates', JSON.stringify(savedDates));
+        updateAttendanceDisplay(savedDates);
+      } else {
+        alert("This date is already marked.");
+      }
+    });
+
+    function updateAttendanceDisplay(dates) {
+      attendanceList.innerHTML = '';
+      dates.sort();
+      dates.forEach(date => {
+        const li = document.createElement('li');
+        li.textContent = date;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = "Remove";
+        removeBtn.className = "remove-btn";
+        removeBtn.onclick = () => removeDate(date);
+
+        li.appendChild(removeBtn);
+        attendanceList.appendChild(li);
+      });
+
+      attendanceCount.textContent = dates.length;
+      updateProgress(dates.length);
+    }
+
+    function removeDate(dateToRemove) {
+      let savedDates = JSON.parse(localStorage.getItem('attendanceDates')) || [];
+      savedDates = savedDates.filter(date => date !== dateToRemove);
+      localStorage.setItem('attendanceDates', JSON.stringify(savedDates));
+      updateAttendanceDisplay(savedDates);
+    }
+
+    function updateProgress(count) {
+      const percent = Math.min((count / GOAL_DAYS) * 100, 100);
+      progressBar.style.width = percent + "%";
+      progressBar.textContent = Math.round(percent) + "%";
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Diary - Home</title>
+  <style>
+    /* Basic resets and styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f7fa;
+      color: #333;
+      animation: fadeIn 0.8s ease-in;
+      scroll-behavior: smooth;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    /* Fixed navigation */
+    nav {
+      width: 100%;
+      background-color: #111;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    nav a {
+      color: #ddd;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    nav a:hover,
+    nav a:focus {
+      background-color: #4a90e2;
+      color: white;
+      outline: none;
+    }
+
+    /* Header styles */
+    header {
+      background: #4a90e2;
+      color: white;
+      text-align: center;
+      padding: 100px 20px 40px; /* add top padding to account for fixed nav */
+    }
+    header h1 {
+      margin: 0 0 10px;
+      font-size: 2.8rem;
+    }
+    header p {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 300;
+      opacity: 0.9;
+    }
+
+    /* Main content */
+    main {
+      padding: 20px;
+      max-width: 960px;
+      margin: 0 auto 60px;
+      margin-top: 30px;
+    }
+
+    /* Grid layout for categories */
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+
+    /* Cards */
+    .category-card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px 20px;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #4a90e2;
+      text-decoration: none;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, color 0.3s, transform 0.2s;
+      user-select: none;
+    }
+    .category-card:hover,
+    .category-card:focus {
+      background-color: #4a90e2;
+      color: white;
+      transform: translateY(-6px);
+      outline: none;
+      cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 15px 20px;
+      font-size: 0.9rem;
+      position: relative;
+      bottom: 0;
+      width: 100%;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .category-card {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav aria-label="Main navigation">
+    <a href="intial.html" tabindex="1">Sign In</a>
+    <a href="login.html" tabindex="2">Log in</a>
+    <a href="home.html" tabindex="3">Home</a>
+    <a href="index.html" tabindex="5">categories</a>
+    <a href="contact.html" tabindex="6">Contact Us</a>
+  </nav>
+
+  <header role="banner">
+    <h1>📓 My Diary</h1>
+    <p>Track your journey, one day at a time.</p>
+    <p id="dateDisplay" style="font-weight: 400; font-size: 1rem; opacity: 0.85;"></p>
+  </header>
+
+  <main role="main">
+    <section class="categories" aria-label="Diary categories">
+      <a href="attendance.html" class="category-card" tabindex="5">Attendance</a>
+      <a href="achivements.html" class="category-card" tabindex="6">Achievements</a>
+      <a href="goals.html" class="category-card" tabindex="7">Goals</a>
+      <a href="notes.html" class="category-card" tabindex="8">Personal Notes</a>
+      <a href="thoughts.html" class="category-card" tabindex="9">Daily Tasks</a>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <p>&copy; 2025 Virtual Student Diary</p>
+  </footer>
+
+  <script>
+    // Show current date below the header
+    const dateDisplay = document.getElementById('dateDisplay');
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    dateDisplay.textContent = new Date().toLocaleDateString(undefined, options);
+  </script>
+</body>
+</html>  
